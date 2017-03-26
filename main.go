@@ -13,7 +13,7 @@ import (
 
 const sqsQueueEnv string = "SQS_QUEUE_URL"
 
-func send(message string, queue string) {
+func send(message string, queue string) error {
 	sess := session.Must(session.NewSession())
 	svc := sqs.New(sess, &aws.Config{})
 	params := &sqs.SendMessageInput{
@@ -23,10 +23,10 @@ func send(message string, queue string) {
 	}
 	resp, err := svc.SendMessage(params)
 	if err != nil {
-		log.Println(err.Error())
-		return
+		return err
 	}
 	fmt.Println(resp)
+	return nil
 }
 
 func process(w http.ResponseWriter, r *http.Request) {
@@ -37,8 +37,15 @@ func process(w http.ResponseWriter, r *http.Request) {
 	}
 	bodyString := string(body[:])
 	log.Printf("Received message: \"%s\".", bodyString)
-	send(bodyString, os.Getenv(sqsQueueEnv))
-	fmt.Fprintf(w, "OK")
+	err = send(bodyString, os.Getenv(sqsQueueEnv))
+	if err != nil {
+		log.Println(err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "ERROR")
+	} else {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, "OK")
+	}
 }
 
 func serve() {
