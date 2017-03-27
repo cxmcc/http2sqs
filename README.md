@@ -25,5 +25,6 @@ For the AWS credential variables, you can totally just use AMI Roles if it's on 
 ```bash
 docker run -e SQS_QUEUE_URL=<https://queue.amazonaws.com/SOMENUMBER/QUEUE_NAME> \
            -e AWS_REGION=us-east-1 \
+           -p 8080:8080 \
            cxmcc/http2sqs
 ```
