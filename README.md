@@ -17,6 +17,9 @@ For the AWS credential variables, you can totally just use AMI Roles if it's on 
 | `AWS_ACCESS_KEY_ID`     |               | no         |
 | `AWS_SECRET_ACCESS_KEY` |               | no         |
 
+### Hosted Docker Image
+
+[cxmcc/http2sqs](https://hub.docker.com/r/cxmcc/http2sqs/)
 
 ### Run it with Docker
 ```bash
