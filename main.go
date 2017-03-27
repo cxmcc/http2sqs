@@ -17,9 +17,8 @@ func send(message string, queue string) error {
 	sess := session.Must(session.NewSession())
 	svc := sqs.New(sess, &aws.Config{})
 	params := &sqs.SendMessageInput{
-		MessageBody:  aws.String(message),
-		QueueUrl:     aws.String(queue),
-		DelaySeconds: aws.Int64(1),
+		MessageBody: aws.String(message),
+		QueueUrl:    aws.String(queue),
 	}
 	resp, err := svc.SendMessage(params)
 	if err != nil {
